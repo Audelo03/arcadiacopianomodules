@@ -14,10 +14,9 @@
   height: 100%;
 }
 
-/* Contenedor principal fullscreen */
+/* Contenedor principal fullscreen - Corregido para evitar que el mapa esté cortado */
 .mapRoot {
   position: fixed;
-
   top: 0;
   left: 0;
   right: 0;
@@ -30,46 +29,56 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
+
+
 .mapHeader {
   padding: 1rem;
-  z-index: 10;
+  z-index: 100; /* Aumentado z-index para asegurar que quede por encima */
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Cambiado de center a flex-end */
+  align-items: flex-end;
   gap: 0.5rem;
-  position: absolute; /* Se mantiene como absolute */
+  position: absolute;
   top: 0;
   right: 0;
-  width: 20%;
-  padding-right: 1rem; /* Agregamos un padding derecho para que no quede pegado a la esquina */
+  width: auto;
+  padding-right: 1rem;
+  background-color: transparent;
+  pointer-events: none;
 }
 
 .mapTitle {
-  color: var(--text-light); /* Cambiado de primary-color a text-light */
+  color: var(--text-light);
   font-size: 1.6rem;
   font-weight: bold;
   margin: 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Sombra para mejor contraste */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   background: linear-gradient(to right, #292036, #000000, 0.01);
   padding: 0.5rem 1rem;
   border-radius: 2rem;
+  pointer-events: auto; /* Para asegurar que sea interactivo */
 }
 
-/* Contenedor del mapa (ocupará todo el espacio disponible) */
+/* Contenedor del mapa (ocupará todo el espacio disponible) - Modificado para asegurar cobertura completa */
 .mapContainer {
   flex: 1;
   width: 100%;
+  height: 100%; /* Asegura altura completa */
   position: relative;
 }
 
-/* Estilo para el elemento del mapa (Google Maps) */
+/* Estilo para el elemento del mapa (Google Maps) - Ajustado para asegurar cobertura completa */
 .mapElement {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: 100%; /* Asegura que el mapa ocupe toda la altura */
 }
 
 /* Controles flotantes */
@@ -82,9 +91,13 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.mapHeader > * { 
+  pointer-events: auto;
+}
+
 .mapButton {
   background: linear-gradient(to right, #292036, #000000);
-
   color: var(--text-light);
   font-weight: bold;
   padding: 0.5rem 1.5rem;
@@ -97,6 +110,7 @@
   z-index: 10;
   height: 100%;
 }
+
 .mapButton:hover {
   background-color: var(--primary-hover);
   transform: scale(1.05);
@@ -105,15 +119,6 @@
 .mapButton:active {
   background-color: var(--primary-active);
   transform: scale(0.98);
-}
-.mapHeader {
-  padding: 0.5rem;
-  gap: 0.3rem;
-}
-
-.mapTitle {
-  font-size: 1.5rem;
-  padding: 0.3rem 0.6rem;
 }
 
 /* Mensajes y estados */
@@ -130,6 +135,7 @@
   z-index: 10;
   max-width: 90%;
   text-align: center;
+  pointer-events: auto; /* Añadido para asegurar interactividad */
 }
 
 .loadingState {
@@ -153,9 +159,9 @@
   margin-bottom: 1rem;
 }
 
-/* Botones */
+/* Botones mejorados */
 .mapButton {
-  background-color: var(--primary-color);
+  background-color: rgba(37, 99, 235, 0.8);
   color: var(--text-light);
   font-weight: bold;
   padding: 0.5rem 1rem;
@@ -168,25 +174,26 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  pointer-events: auto; /* Asegura que sean interactivos */
 }
 
 .mapButton:hover {
-  background-color: var(--primary-hover);
+  background-color: rgba(37, 99, 235, 0.9);
   transform: scale(1.05);
 }
 
 .mapButton:active {
-  background-color: var(--primary-active);
+  background-color: rgba(37, 99, 235, 1);
   transform: scale(0.98);
 }
 
 /* Animaciones */
 @keyframes spin {
   0% {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -214,199 +221,7 @@
   }
 }
 
-/* Añadir estos estilos a tu archivo GoogleMaps.module.css */
-
-.gpsToggle {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border: 2px solid #ddd;
-  border-radius: 20px;
-  padding: 5px 12px;
-  margin-left: 10px;
-  transition: all 0.3s ease;
-}
-
-.gpsToggle.active {
-  background-color: #e1f5fe;
-  border-color: #0288d1;
-  color: #0288d1;
-}
-
-.gpsLabel {
-  margin-left: 8px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.gpsInfo {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin-left: auto;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.gpsCoords {
-  font-family: monospace;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-
-.gpsTimestamp {
-  font-size: 12px;
-  color: #666;
-  margin-top: 2px;
-}
-
-/* Estilo para cuando estamos en modo GPS externo */
-/* In GoogleMaps.module.css */
-
-.mapHeader {
-  padding: 1rem;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: auto; /* Adjusted from 20% to auto */
-  padding-right: 1rem;
-  /* Remove or comment out existing background properties */
-  /* background-color: rgba(255, 255, 255, 0.9); */ /* Example: Remove this */
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */ /* Optional: Remove shadow if you want it fully invisible */
-  background-color: transparent; /* Ensure background is transparent */
-  pointer-events: none; /* Allow clicks to pass through the header container */
-}
-
-/* Make sure buttons within the header are clickable */
-.mapButton,
-.gpsToggle,
-.gpsInfo {
-  /* Add other interactive elements here if needed */
-  pointer-events: auto; /* Override pointer-events for buttons/elements */
-  /* You might need to re-add a background if you removed it from .mapHeader and want the buttons to have one */
-  /* background-color: rgba(0, 0, 0, 0.6); /* Example semi-transparent background for buttons */
-  /* border-radius: 20px; */ /* Example styling */
-  /* padding: 5px 12px; */ /* Example styling */
-}
-
-/* Optional: Adjust media query if needed */
-.mapHeader {
-  padding: 1rem;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: auto;
-  padding-right: 1rem;
-  background-color: transparent; /* Fondo completamente transparente */
-  pointer-events: none; /* Permitir que los clics pasen a través del contenedor */
-}
-
-/* Hacer que los elementos dentro del header sean interactivos */
-.mapButton,
-.gpsToggle,
-.gpsInfo {
-  pointer-events: auto; /* Anular pointer-events para que los botones sean interactivos */
-  margin-bottom: 0.5rem; /* Espacio entre botones */
-}
-
-/* Estilos para botones que necesiten un fondo para ser visible */
-.mapButton {
-  background-color: rgba(37, 99, 235, 0.8); /* Semi-transparente */
-  color: white;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  border: none;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.mapButton:hover {
-  background-color: rgba(37, 99, 235, 0.9);
-  transform: scale(1.05);
-}
-
-.mapButton:active {
-  background-color: rgba(37, 99, 235, 1);
-  transform: scale(0.98);
-}
-
-/* Estilos para el toggle del GPS externo */
-.gpsToggle {
-  display: flex;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  color: #333;
-  border: 2px solid #ddd;
-  border-radius: 20px;
-  padding: 5px 12px;
-  transition: all 0.3s ease;
-}
-
-.gpsToggle.active {
-  background-color: rgba(225, 245, 254, 0.9);
-  border-color: #0288d1;
-  color: #0288d1;
-}
-
-.gpsLabel {
-  margin-left: 8px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Estilos para la información del GPS */
-.gpsInfo {
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  padding: 8px 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.gpsCoords {
-  font-family: monospace;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-
-.gpsTimestamp {
-  font-size: 12px;
-  color: #666;
-  margin-top: 2px;
-}
-
-.transparentHeader {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  pointer-events: none; /* Permite que los clics pasen a través del header al mapa */
-}
-
-/* Asegurar que los botones y elementos interactivos sean clickeables */
-.mapButton,
-.gpsToggle,
-.gpsInfo,
-.errorBox {
-  pointer-events: auto; /* Restaura la capacidad de interacción solo para estos elementos */
-  z-index: 1000; /* Asegura que estén por encima del mapa */
-}
-
-/* Estilos mejorados para el botón de GPS */
+/* Estilos para GPS */
 .gpsToggle {
   display: flex;
   align-items: center;
@@ -418,6 +233,7 @@
   margin-bottom: 8px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  pointer-events: auto; /* Añadido para asegurar interactividad */
 }
 
 .gpsToggle.active {
@@ -426,7 +242,12 @@
   color: #0288d1;
 }
 
-/* Información de GPS con mejor contraste */
+.gpsLabel {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .gpsInfo {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
@@ -434,32 +255,42 @@
   margin-top: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   min-width: 200px;
+  pointer-events: auto; /* Añadido para asegurar interactividad */
 }
 
-/* Asegurarse que todo el header tenga margen adecuado */
-.mapHeader {
-  padding: 1rem;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: auto;
-  padding-right: 1rem;
+.gpsCoords {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.gpsTimestamp {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Transparencia en header */
+.transparentHeader {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none;
 }
 
 /*Botones de lugares por categoría*/
 .footerButtons {
+  position: fixed; /* Cambiado a fixed para mejor posicionamiento */
+  bottom: 0; /* Asegura que esté en la parte inferior */
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem; /* Menor separación entre botones */
-  margin: 0.5rem auto; /* Menor margen exterior */
-  padding: 0.4rem; /* Menor padding interior */
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.4rem;
   width: 100%;
   z-index: 100;
   background-color: rgba(18, 18, 18, 0.9);
@@ -469,10 +300,10 @@
   background-color: rgba(37, 99, 235, 0.8);
   color: var(--text-light);
   font-weight: 600;
-  padding: 0.3rem 0.8rem; /* Botones más pequeños */
+  padding: 0.3rem 0.8rem;
   border-radius: 1.5rem;
   border: none;
-  font-size: 0.75rem; /* Letra más pequeña */
+  font-size: 0.75rem;
   cursor: pointer;
   transition: var(--transition);
   box-shadow: var(--shadow);
@@ -489,4 +320,135 @@
 .categoryButton:active {
   background-color: var(--primary-active);
   transform: scale(0.97);
+}
+
+/* Contenedor FAB para POIs */
+.poiFabContainer {
+  
+  position: fixed;
+  bottom: 5rem;
+  right: .3rem;
+  z-index: 1010;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+}
+
+.poiFab {
+  background: linear-gradient(145deg, #221e2b 0%, #241ba5 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  outline: none;
+}
+
+.poiFab:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0,0,0,0.25);
+}
+
+.poiFab:active {
+  transform: translateY(-1px) scale(0.97);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Menú POI */
+.poiMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; 
+  background-color: transparent;
+  padding: 1rem; 
+  margin-bottom: 1rem; 
+  width: max-content; 
+  gap: 0.3rem; 
+  max-height: calc(100vh - 12rem); 
+  overflow-y: hidden; 
+  pointer-events: none;
+}
+
+/* Animación para ítems del menú */
+@keyframes emergeItem {
+  0% {
+    opacity: 0;
+    transform: translateY(25px) scale(0.7);
+  }
+  60% {
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Ítems de menú POI */
+.poiMenuItem {
+  background-color: rgba(45, 55, 72, 0.92); 
+  color: #e8e8e8; 
+  border: none;
+  border-radius: 22px; 
+  height: 44px; 
+  padding: 0 11px; 
+  cursor: pointer;
+  display: flex;
+  align-items: center; 
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25); 
+  pointer-events: auto;
+  
+  opacity: 0;
+  transform: scale(0.6) translateY(10px);
+  animation-name: emergeItem;
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.1, 0.7, 0.3, 1);
+  animation-fill-mode: forwards;
+  
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.poiMenuItem svg {
+  flex-shrink: 0; 
+  transition: transform 0.2s ease-in-out;
+}
+
+.poiMenuItemText {
+  font-size: 0.9rem; 
+  font-weight: 500;
+  white-space: nowrap; 
+  opacity: 0;
+  max-width: 0;
+  margin-left: 0;
+  transition: opacity 0.25s ease-out 0.1s, 
+              max-width 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+              margin-left 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+}
+
+.poiMenuItem:hover,
+.poiMenuItem:focus {
+  background-color: rgba(76, 136, 255, 0.95); 
+  color: #ffffff; 
+  outline: none; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+}
+
+.poiMenuItem:hover svg,
+.poiMenuItem:focus svg {
+  transform: scale(1.12);
+}
+
+.poiMenuItem:hover .poiMenuItemText,
+.poiMenuItem:focus .poiMenuItemText {
+  opacity: 1;
+  max-width: 180px; 
+  margin-left: 0.85rem; 
 }
